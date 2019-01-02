@@ -1,9 +1,11 @@
-import VPlay 2.0
+﻿import VPlay 2.0
 import QtQuick 2.0
 import VPlayApps 1.0
 
 Item {
   id: liuLiReadingModel
+
+  signal fetchPageSuccess()
 
   // property to configure target dispatcher / logic
   property alias dispatcher: logicConnection.target
@@ -15,6 +17,8 @@ Item {
 
   readonly property alias liuLiReadings: _.liuLiReadings
   readonly property alias memories: _.memories
+  readonly property alias memories_count: _.memories_count
+
   property int current_memories_page: 1
   property int per_memories_page: 10
 
@@ -127,7 +131,8 @@ Item {
 
     property var firstTweetData
     property var liuLiReadings
-    property var memories
+    property var memories: []
+    property var memories_count
 
     function loadPageMemories(page, per_page){
         page = page || '1'
@@ -139,8 +144,15 @@ Item {
         .set('Authentication-Token', token)
         .then(function(res) {
 //          console.log("http return: ",res, JSON.stringify(res.body))
-          _.memories = res.body.memories
-//          console.log("Loading loadPageMemories result:", _.memories)
+          if(page.toString() == 1){
+              _.memories = res.body.memories
+          } else {
+              _.memories = _.memories.concat(res.body.memories)
+          }
+
+          _.memories_count = res.body.total
+          console.log("Loading loadPageMemories result:", JSON.stringify(_.memories))
+          fetchPageSuccess()
         })
         .catch(function(err) {
             console.error(err);

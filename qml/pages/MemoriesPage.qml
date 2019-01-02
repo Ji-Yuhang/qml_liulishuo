@@ -6,6 +6,9 @@ import "../widgets"
 import "../model"
 
 ListPage {
+    property var last_pos
+
+
   id: page
 
   title: qsTr("Memoreis")
@@ -19,7 +22,7 @@ ListPage {
 
     onSelected: {
       console.debug("Selected item at index:", index)
-      navigationStack.push(detailPageComponent, { tweet: row.item })
+      navigationStack.push(memoryDetailPage, { memory: row.item })
     }
 
     onProfileSelected: {
@@ -27,14 +30,14 @@ ListPage {
       navigationStack.push(profilePageComponent, { profile: row.item.user })
     }
   }
-  pullToRefreshHandler.pullToRefreshEnabled: true
+//  pullToRefreshHandler.pullToRefreshEnabled: true
 //  pullToRefreshHandler.onRefreshingChanged: {
 //       console.log("PullToRefreshHandler onRefreshingChanged")
 //  }
-    pullToRefreshHandler.onRefresh: {
-      console.log("PullToRefreshHandler onRefresh")
-      logic.fetchMemories()
-  }
+//    pullToRefreshHandler.onRefresh: {
+//      console.log("PullToRefreshHandler onRefresh")
+//      logic.fetchMemories()
+//  }
 //  pullToRefreshHandler: PullToRefreshHandler {
 //      onRefresh: {
 //            console.log("PullToRefreshHandler onRefresh")
@@ -42,6 +45,39 @@ ListPage {
 //        }
 //  }
 
+    //load older tweets with visibility handler
+    listView.footer: VisibilityRefreshHandler {
+      canRefresh: liuLiReadingModel.messages ? liuLiReadingModel.memories_count > liuLiReadingModel.messages.length : false
+      onRefresh: {
+          console.log("VisibilityRefreshHandler onRefresh")
+          last_pos = listView.getScrollPosition()
+
+          logic.fetchMoreMemories()
+
+      }
+    }
+    Connections {
+        target: liuLiReadingModel
+        onFetchPageSuccess:{
+            if (last_pos){
+                listView.restoreScrollPosition(last_pos)
+            }
+
+
+        }
+    }
+
+
+
+    //load new tweets with pull handler
+    pullToRefreshHandler {
+      pullToRefreshEnabled: true
+      onRefresh: {
+          console.log("PullToRefreshHandler onRefresh")
+          logic.fetchMemories()
+      }
+//      refreshing: loadNewTimer.running
+    }
 
 }
 //晚上9点半之前，把冀佳琪灰色厚羽绒服送到高二二班楼下阿姨那里。

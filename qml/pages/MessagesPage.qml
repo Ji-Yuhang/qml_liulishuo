@@ -19,7 +19,7 @@ ListPage {
       console.log("listView.onAtYEndChanged",listView.atYEnd)
       if (listView.atYEnd) {
         // Loading tail messages...
-          login.fetchMoreMemories()
+          logic.fetchMoreMemories()
       }
     }
   listView.footer:  VisibilityRefreshHandler {
@@ -36,7 +36,7 @@ ListPage {
         }
       }
 
-      onRefresh: login.fetchMoreMemories()
+      onRefresh: logic.fetchMoreMemories()
 
     }
   delegate: TweetRow {

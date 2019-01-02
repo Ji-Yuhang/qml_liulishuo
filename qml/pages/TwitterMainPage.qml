@@ -14,6 +14,7 @@ Page {
   // These can be used from anywhere in the app - this way the QML files are parsed only once
   Component { id: mainPageComponent; MainPage { } }
   Component { id: detailPageComponent; DetailPage { } }
+  Component { id: memoryDetailPage; MemoryDetailPage { } }
   Component { id: profilePageComponent; ProfilePage { } }
   Component { id: listsPageComponent; ListsPage { } }
 

@@ -42,4 +42,5 @@ DISTFILES += \
     qml/pages/LoginPage.qml \
     qml/pages/MemoriesPage.qml \
     qml/widgets/MemoriesRowqml \
-    qml/widgets/MemoriesRow.qml
+    qml/widgets/MemoriesRow.qml \
+    qml/pages/MemoryDetailPage.qml

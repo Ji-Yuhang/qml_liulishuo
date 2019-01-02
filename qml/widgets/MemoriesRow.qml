@@ -32,7 +32,9 @@ Item {
   // model
   property string question: item && item.question || ""
   property string answer: item && item.answer || ""
-
+  property string memory_id: item && item.id || ""
+  property var tags: item && item.tags || []
+  property string created_at: item && item.created_at || ""
 
   // Temp, should be in theme!
   property color favColor: "#ffac33"
@@ -115,7 +117,7 @@ Item {
       font.pixelSize: dp(14)
       lineHeight: dp(16)
       lineHeightMode: Text.FixedHeight
-      text: cell.question
+      text: "Q: "+cell.memory_id// + " #"+cell.tags.map(function(t){return t.name;}).join()
     }
 
     Text {
@@ -128,7 +130,7 @@ Item {
       font.pixelSize: dp(12)
       lineHeight: dp(16)
       lineHeightMode: Text.FixedHeight
-      text: "#"+cell.tag
+      text: "#"+cell.tags.map(function(t){return t.name;}).join()
       Layout.fillWidth: true
       verticalAlignment: Text.AlignBottom
       Layout.preferredWidth: parent.width
@@ -144,7 +146,7 @@ Item {
       lineHeight: dp(16)
       lineHeightMode: Text.FixedHeight
       verticalAlignment: Text.AlignBottom
-      text: cell.day
+      text: cell.created_at
       Layout.alignment: Qt.AlignRight
     }
 
@@ -155,7 +157,7 @@ Item {
       font.family: Theme.normalFont.name
       font.pixelSize: dp(14)
       lineHeight: 1.15
-      text: cell.answer
+      text: cell.question
       wrapMode: Text.WordWrap
       Layout.columnSpan: 3
       Layout.fillWidth: true
